@@ -1,19 +1,16 @@
-var synth = window.speechSynthesis;
-var voice;
-var name = "Samantha";
-var utter = new SpeechSynthesisUtterance();
-
 var recognition = new webkitSpeechRecognition();
 recognition.continuous = true;
+recognition.start();
 recognition.onresult = function(event) {
     var spoken = event.results[event.results.length-1][0].transcript.trim();
     if(spoken == "stop" || spoken == "shut up") {
-        synth.cancel();
+        responsiveVoice.cancel();
         return;
     }
     output.textContent = spoken;
-    utter.text = getSonnet(spoken);
-    synth.speak(utter);
+    var text = getSonnet(spoken);
+    console.log(text);
+    responsiveVoice.speak(text, "UK English Male", {rate: .8, pitch: .5});
 };
 
 var output;
@@ -27,18 +24,7 @@ window.onload = function() {
     });
 }
 
-synth.onvoiceschanged = function() {
-    var voices = synth.getVoices();
-    voice = voices.find(v => v.name == name);
-    
-    console.log(voices);
 
-    utter.voice = voice;
-    utter.rate = .8;
-    utter.pitch = .5;
-    
-    recognition.start();
-}
 
 function getSonnet(s) {
     s = s.toLowerCase();
@@ -71,6 +57,6 @@ function getSonnetInt(i) {
 
 function stop() {
     recognition.stop();
-    synth.cancel();
+    responsiveVoice.cancel();
 }
 
