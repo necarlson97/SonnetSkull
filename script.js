@@ -30,6 +30,8 @@ window.onload = function() {
 synth.onvoiceschanged = function() {
     var voices = synth.getVoices();
     voice = voices.find(v => v.name == name);
+    
+    console.log(voices);
 
     utter.voice = voice;
     utter.rate = .8;
@@ -43,7 +45,7 @@ function getSonnet(s) {
     var split = s.split(' ');
     var keyword = split[split.length-1];
     
-    console.log(keyword);
+    if(keyword == "to") keyword = "two";
     
     if(keyword.match(/\d+/))
        return getSonnetInt(parseInt(keyword));
