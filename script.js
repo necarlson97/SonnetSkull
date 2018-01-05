@@ -7,10 +7,8 @@ recognition.onresult = function(event) {
         responsiveVoice.cancel();
         return;
     }
-    output.textContent = spoken;
-    var text = getSonnet(spoken);
-    console.log(text);
-    responsiveVoice.speak(text, "UK English Male", {rate: .8, pitch: .5});
+    output.value = spoken;
+    speak();
 };
 
 var output;
@@ -22,20 +20,28 @@ window.onload = function() {
     jQuery.get('sonnets.txt', function(data) {
         sonnets = data.toLowerCase().split(/^[IVCLX]+\.\n/gmi);
     });
+    
+    video = document.getElementsByTagName("video")[0];
+    activateCamera();
 }
 
-
+function speak() {
+    var text = output.value;
+    console.log("Speaking: "+text);
+    var sonnet = getSonnet(text);
+    responsiveVoice.speak(sonnet, "UK English Male", {rate: .8, pitch: .5});
+}
 
 function getSonnet(s) {
     s = s.toLowerCase();
     var split = s.split(' ');
     var keyword = split[split.length-1];
-    
+
     if(keyword == "to") keyword = "two";
-    
+
     if(keyword.match(/\d+/))
-       return getSonnetInt(parseInt(keyword));
-    
+        return getSonnetInt(parseInt(keyword));
+
     var max = 0;
     var maxI = -1;
     for(var i=0; i<sonnets.length; i++) {
@@ -58,5 +64,24 @@ function getSonnetInt(i) {
 function stop() {
     recognition.stop();
     responsiveVoice.cancel();
+}
+
+var video;
+
+function activateCamera() {
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+    if (navigator.getUserMedia) {       
+        navigator.getUserMedia({video: true}, handleVideo, videoError);
+    }
+}
+
+function handleVideo(stream) {
+    video.src = window.URL.createObjectURL(stream);
+}
+
+function videoError(e) {
+    alert("Error");
+    console.log(e);
 }
 

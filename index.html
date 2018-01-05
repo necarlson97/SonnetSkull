@@ -2,13 +2,14 @@
     <head>
         <link rel="stylesheet" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="jquery-bigtext.js"></script>
         <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
         <script src="script.js"></script>
         <title>Sonnet Skulll</title>
         <meta name="description" content="Poor yorrik, I knew him well">
     </head>
     <body>
-        <button onclick="stop()">stop</button>
-        <div id="output"></div>
+        <input id="output" onchange="speak()" autofocus>
+        <video autoplay="true"></video>
     </body>
 </html>
