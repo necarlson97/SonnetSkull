@@ -3,10 +3,6 @@ recognition.continuous = true;
 recognition.start();
 recognition.onresult = function(event) {
     var spoken = event.results[event.results.length-1][0].transcript.trim();
-    if(spoken == "stop" || spoken == "shut up") {
-        responsiveVoice.cancel();
-        return;
-    }
     output.value = spoken;
     speak();
 };
@@ -34,6 +30,12 @@ function speak() {
 
 function getSonnet(s) {
     s = s.toLowerCase();
+    
+    if(s == "stop" || s == "shut up") {
+        responsiveVoice.cancel();
+        return "Stopping";
+    }
+    
     var split = s.split(' ');
     var keyword = split[split.length-1];
 
